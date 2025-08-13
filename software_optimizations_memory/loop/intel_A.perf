@@ -1,0 +1,8 @@
+==3532216== Cachegrind, a high-precision tracing profiler
+==3532216== Copyright (C) 2002-2017, and GNU GPL'd, by Nicholas Nethercote et al.
+==3532216== Using Valgrind-3.22.0 and LibVEX; rerun with -h for copyright info
+==3532216== Command: ./loop_A 524288
+==3532216== 
+33680398,20683633,0.614115,0.185847,0.003844,0.012594,274332,21783575
+==3532216== 
+==3532216== I refs:        201,663,607
