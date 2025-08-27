@@ -1,27 +1,32 @@
 all: popcount popcount_B popcount_C popcount_D popcount_SSE42 popcount_E
 
-popcount: 
-	g++ -O3 popcount.cpp -o popcount_A
-	g++ -S -O3 popcount.cpp -o A.s
+EXTRA_OPTS = -DHAVE_LINUX_PERF_EVENT_H -w
 
-popcount_B: 
-	g++ -O3 -DB popcount.cpp -o popcount_B
-	g++ -S -O3 -DB popcount.cpp -o B.s
+perfstats.o: perfstats.c perfstats.h
+	gcc -g  -O3 $(EXTRA_OPTS) -I$(PWD) $(LIBS) -o perfstats.o -c perfstats.c
 
-popcount_C: 
-	g++ -O3 -DC popcount.cpp -o popcount_C
-	g++ -S -O3 -DC popcount.cpp -o C.s
+popcount: perfstats.o popcount.cpp
+	g++ -O3 $(EXTRA_OPTS) popcount.cpp perfstats.o -o popcount_A
+	g++ -S -O3 $(EXTRA_OPTS) popcount.cpp -o A.s
 
-popcount_D: 
-	g++ -O3 -DD popcount.cpp -o popcount_D
-	g++ -S -O3 -DD popcount.cpp -o D.s
+popcount_B: perfstats.o popcount.cpp
+	g++ -O3 $(EXTRA_OPTS) -DB popcount.cpp perfstats.o -o popcount_B
+	g++ -S -O3 $(EXTRA_OPTS) -DB popcount.cpp -o B.s
 
-popcount_E: 
-	g++ -O3 -DE popcount.cpp -o popcount_E
-	g++ -S -O3 -DE popcount.cpp -o E.s
+popcount_C: perfstats.o popcount.cpp
+	g++ -O3 $(EXTRA_OPTS) -DC popcount.cpp perfstats.o -o popcount_C
+	g++ -S -O3 $(EXTRA_OPTS) -DC popcount.cpp -o C.s
 
-popcount_SSE42: 
-	g++ -O3 -m64 -msse4.2 -DSSE42 popcount.cpp -o popcount_SSE42
+popcount_D: perfstats.o popcount.cpp
+	g++ -O3 $(EXTRA_OPTS) -DD popcount.cpp perfstats.o -o popcount_D
+	g++ -S -O3 $(EXTRA_OPTS) -DD popcount.cpp -o D.s
+
+popcount_E: perfstats.o popcount.cpp
+	g++ -O3 $(EXTRA_OPTS) -DE popcount.cpp perfstats.o -o popcount_E
+	g++ -S -O3 $(EXTRA_OPTS) -DE popcount.cpp -o E.s
+
+popcount_SSE42: perfstats.o popcount.cpp
+	g++ -O3 $(EXTRA_OPTS) -m64 -msse4.2 -DSSE42 popcount.cpp perfstats.o -o popcount_SSE42
 	
 dump:
 	otool -tV popcount

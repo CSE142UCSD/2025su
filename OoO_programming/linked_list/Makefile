@@ -4,7 +4,7 @@ all: linked_list linked_list.s
 #arraySort
 
 EXTRA_CFLAGS = -DHAVE_LINUX_PERF_EVENT_H
-CFLAGS = -O3 -w -Wno-implicit-function-declaration -Wno-format-zero-length
+CFLAGS = -O1 -w -mno-avx -Wno-implicit-function-declaration -Wno-format-zero-length
 
 linked_list: linked_list.c linked_list_main.c perfstats.c 
 	$(CC) -c $(CFLAGS) $(EXTRA_CFLAGS) perfstats.c 
